@@ -11,22 +11,134 @@
         padding: 0;
         height: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: #f0f0f0; /* Or any background color you want */
+        background-color: #f5f6f8;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
       }
+
+      .showcase-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .lang-toggle {
+        display: flex;
+        background: #e2e8f0;
+        padding: 4px;
+        border-radius: 30px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .lang-btn {
+        padding: 8px 24px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #64748b;
+        border: none;
+        background: transparent;
+        border-radius: 24px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        z-index: 2;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 63px;
+        height: 32px;
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          width 0.3s ease;
+        z-index: 1;
+      }
+
+      .lang-btn.active {
+        color: #00a16b;
+      }
+
       iframe {
         width: 1180px;
         height: 820px;
-        border: 1px solid #ccc;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        background-color: #ffffff;
+        transition: opacity 0.15s ease;
       }
     </style>
   </head>
   <body>
-    <iframe
-      src="https://gum-pwa-final-h6fylegrd-dvoraniis-projects.vercel.app/"
-      frameborder="0"
-    ></iframe>
+    <div class="showcase-container">
+      <div class="lang-toggle" id="langToggle">
+        <div class="toggle-slider" id="slider"></div>
+        <button
+          class="lang-btn active"
+          id="btnEn"
+          onclick="switchLanguage('en')"
+        >
+          EN
+        </button>
+        <button class="lang-btn" id="btnFr" onclick="switchLanguage('fr')">
+          FR
+        </button>
+      </div>
+
+      <iframe
+        id="appViewer"
+        src="https://gum-pwa-final.vercel.app/"
+        frameborder="0"
+      ></iframe>
+    </div>
+
+    <script>
+      const urls = {
+        en: "https://gum-pwa-final.vercel.app/",
+        fr: "https://gum-pwa-fr.vercel.app/",
+      };
+
+      const iframe = document.getElementById("appViewer");
+      const btnEn = document.getElementById("btnEn");
+      const btnFr = document.getElementById("btnFr");
+      const slider = document.getElementById("slider");
+
+      function switchLanguage(lang) {
+        if (lang === "en" && btnEn.classList.contains("active")) return;
+        if (lang === "fr" && btnFr.classList.contains("active")) return;
+
+        iframe.style.opacity = "0.3";
+
+        if (lang === "en") {
+          btnEn.classList.add("active");
+          btnFr.classList.remove("active");
+          slider.style.transform = "translateX(0px)";
+          slider.style.width = "63px";
+          iframe.src = urls.en;
+        } else {
+          btnFr.classList.add("active");
+          btnEn.classList.remove("active");
+
+          slider.style.transform = "translateX(61px)";
+          slider.style.width = "62px";
+          iframe.src = urls.fr;
+        }
+
+        iframe.onload = () => {
+          iframe.style.opacity = "1";
+        };
+      }
+    </script>
   </body>
 </html>
